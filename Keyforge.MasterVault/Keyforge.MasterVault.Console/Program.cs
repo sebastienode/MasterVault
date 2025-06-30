@@ -5,7 +5,7 @@ using Keyforge.MasterVault.Web;
 Console.WriteLine("Hello, World!");
 
 //TODO SET TOKEN
-var mvClient = MarterVaultClient.GetDefaultClient("");
+var mvClient = MarterVaultClient.GetDefaultClient("", "fr-fr");
 
 try
 {
@@ -52,7 +52,7 @@ void DisplayCard(DeckPage deck1, string house)
 		var card = deck1.Linked.Cards.FirstOrDefault(c => c.Id == guid);
         if (card != null && card.House == house)
 		{
-			Console.WriteLine($"\t- {card.CardTitleEn}");
+			Console.WriteLine($"\t- {card.CardTitle}");
         }
     }
 }

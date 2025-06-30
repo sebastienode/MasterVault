@@ -4,14 +4,14 @@ using System.Text.Json;
 
 namespace Keyforge.MasterVault.Web
 {
-    public interface IMasterVaultClient 
+    public interface IMasterVaultClient : IDisposable
     {
         Task<DeckPage> GetDeckAsync(Guid deckId, IToDictionnary? parameters = null);
         
         Task<AllianceDeck> GetAllianceDeckAsync(Guid deckId, IToDictionnary? parameters = null);
     }
 
-    public class MarterVaultClient : IMasterVaultClient, IDisposable
+    public class MarterVaultClient : IMasterVaultClient
     {
         private readonly HttpClientWrapper _httpClientWrapper;
 
@@ -33,13 +33,17 @@ namespace Keyforge.MasterVault.Web
             _httpClientWrapper = httpClientWrapper ?? throw new ArgumentNullException(nameof(httpClientWrapper));
         }
 
-        public static MarterVaultClient GetDefaultClient(string token)
+        public static MarterVaultClient GetDefaultClient(string token, string? language = null)
         {
             var client = new HttpClient
             {
                 BaseAddress = new Uri("https://keyforgegame.com/api/")
             };
             client.DefaultRequestHeaders.Add("X-Authorization", $"Token {token}");
+            if (language != null)
+            {
+                client.DefaultRequestHeaders.Add("Accept-Language", language);
+            }
             return new MarterVaultClient(client, true);
         }
 
